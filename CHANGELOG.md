@@ -1,3 +1,15 @@
+## 1.3.3
+
+- Updated Android SDK from API 31 to API 36 (compileSdkVersion and targetSdkVersion)
+- Updated Android Gradle Plugin from 4.1.0 to 8.1.4
+- Updated Gradle wrapper from 7.4 to 8.4
+- Updated Kotlin from 1.9.22 to 1.9.22
+- Removed deprecated Flutter v1 embedding support (registerWith method)
+- Updated AndroidX dependencies to latest versions
+- Migrated example app to use declarative Flutter Gradle plugin
+- Removed build artifacts (.cxx) that were incorrectly committed
+- Added .cxx to .gitignore
+
 ## 1.1.1
 
 - Bump to Dart3 + Android gradle namespace fix (PR #13)

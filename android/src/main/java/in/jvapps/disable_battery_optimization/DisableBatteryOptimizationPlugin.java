@@ -107,10 +107,10 @@ public class DisableBatteryOptimizationPlugin implements FlutterPlugin, Activity
             case "showDisableBatteryOptimization":
                 try {
                     List arguments = (List) call.arguments;
-                    if(arguments != null) {
-                        autoStartTitle = String.valueOf(arguments.get(0));
-                        autoStartMessage = String.valueOf(arguments.get(1));
-                        showIgnoreBatteryPermissions(() -> {
+                    if (arguments != null) {
+                        String batteryOptTitle = String.valueOf(arguments.get(0));
+                        String batteryOptMessage = String.valueOf(arguments.get(1));
+                        showDisableBatteryOptimizationDialog(batteryOptTitle, batteryOptMessage, () -> {
                             result.success("enabled");
                         }, () -> {
                             result.success("disabled");
@@ -249,6 +249,33 @@ public class DisableBatteryOptimizationPlugin implements FlutterPlugin, Activity
                 },
                 notAvailableCallback
         );
+    }
+
+    private void showDisableBatteryOptimizationDialog(
+            String dialogTitle,
+            String dialogBody,
+            @NonNull final BatteryOptimizationUtil.OnBatteryOptimizationAccepted positiveCallback,
+            @NonNull final BatteryOptimizationUtil.OnBatteryOptimizationCanceled negativeCallback,
+            @NonNull final BatteryOptimizationUtil.OnBatteryOptimizationNotAvailable notAvailableCallback) {
+        // Check if the system battery optimization intent is available
+        final Intent ignoreBatteryOptimizationsIntent = BatteryOptimizationUtil.getIgnoreBatteryOptimizationsIntent(mContext);
+        if (ignoreBatteryOptimizationsIntent != null) {
+            // Show custom dialog first, then launch the system screen when user accepts
+            new android.app.AlertDialog.Builder(mActivity)
+                    .setTitle(dialogTitle)
+                    .setMessage(dialogBody)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        mContext.startActivity(ignoreBatteryOptimizationsIntent);
+                        positiveCallback.onBatteryOptimizationAccepted();
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        negativeCallback.onBatteryOptimizationCanceled();
+                    })
+                    .setCancelable(false)
+                    .show();
+        } else {
+            notAvailableCallback.OnBatteryOptimizationNotAvailable();
+        }
     }
 
     private void showIgnoreBatteryPermissions(

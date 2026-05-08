@@ -236,15 +236,14 @@ public class DisableBatteryOptimizationPlugin implements FlutterPlugin, Activity
                     if (isRequestNativeBatteryOptimizationDisabler) {
                         showIgnoreBatteryPermissions(positiveCallback, negativeCallback, notAvailableCallback);
                     } else {
-                        notAvailableCallback.OnBatteryOptimizationNotAvailable();
-                        
+                        positiveCallback.onBatteryOptimizationAccepted();
                     }
                 },
                 () -> {
                     if (isRequestNativeBatteryOptimizationDisabler) {
                         showIgnoreBatteryPermissions(positiveCallback, negativeCallback, notAvailableCallback);
                     } else {
-                        notAvailableCallback.OnBatteryOptimizationNotAvailable();
+                        negativeCallback.onBatteryOptimizationCanceled();
                     }
                 },
                 notAvailableCallback

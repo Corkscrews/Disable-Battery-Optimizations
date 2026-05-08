@@ -108,8 +108,8 @@ public class DisableBatteryOptimizationPlugin implements FlutterPlugin, Activity
                 try {
                     List arguments = (List) call.arguments;
                     if(arguments != null) {
-                        autoStartTitle = String.valueOf(arguments.get(0));
-                        autoStartMessage = String.valueOf(arguments.get(1));
+                        // Arguments (dialogTitle, dialogBody) are intentionally not stored as fields
+                        // because showIgnoreBatteryPermissions() uses the system dialog directly
                         showIgnoreBatteryPermissions(() -> {
                             result.success("enabled");
                         }, () -> {
